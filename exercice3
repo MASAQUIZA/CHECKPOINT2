@@ -1,0 +1,97 @@
+# Vérification d'une infrastructure réseau
+
+## Q.3.1 Quel est le matériel réseau A ?
+le switch A agit comme un point central permettant aux ordinateurs du réseau local
+de communiquer entre eux et d'envoyer leurs requêtes au routeur B pour accéder
+à d'autres réseaux 
+
+## Quel est son rôle sur ce schéma vis-à-vis des ordinateurs ?
+Connexion des ordinateurs en réseau local (LAN)
+Il permet aux ordinateurs (PC1, PC2, PC3, PC4, PC5) de *communiquer entre eux 
+
+
+## Q.3.2 Quel est le matériel réseau B ?
+B= Routeur
+Quel est son rôle pour le réseau 10.10.0.0/16 ?
+Il sert de passerelle (gateway) pour les ordinateurs du réseau 10.10.0.0/16 .
+Il permet la communication entre le réseau 10.10.0.0/16 et d'autres réseaux 
+comme 10.12.2.0/24 et 172.16.5.0/24 .
+Il est connecté au routeur R2 , qui gère la liaison avec 
+le réseau 172.16.5.0/24 .
+
+
+## Q.3.3 Que signifie f0/0 et g1/0 sur l’élément B ?
+Sont des interfaces réseau du routeur B
+f0/0 (FastEthernet 0/0) : Interface FastEthernet ,
+généralement limitée à 100 Mbps .
+      Connectée au réseau 10.10.0.0/16 (le PC et le switch).
+      Adresse IP : 10.10.255.254/16 (passerelle des PC).
+g1/0 (GigabitEthernet 1/0) : Interface GigabitEthernet ,
+qui permet un débit plus élevé ( 1 Gbps ).
+      Connectée au routeur R2 via le réseau 10.12.2.0/24 .
+      Adresse IP : 10.12.2.254/24
+Ces interfaces permettent à B de router le trafic entre le
+réseau local (10.10.0.0/16) et le reste du réseau 
+      
+## Q.3.4 Pour l'ordinateur PC2, que représente /16 dans son adresse IP ?
+Le /16 est un masque de sous-réseau qui signifie que :
+    Les 16 premiers bits (10.11.0.0) représentent l'adresse du réseau .
+    Les 16 bits restants sont utilisés pour adresser les hôtes.
+    Cela permet un maximum de 65 534 adresses IP utilisables dans ce sous-réseau ( 2¹⁶ - 2 ).
+PC2 appartient donc au réseau 10.11.0.0/16
+
+
+## Q.3.5 Pour ce même ordinateur, que représente l'adresse 10.10.255.254 ?
+
+L'adresse 10.10.255.254 est l'adresse de la passerelle par défaut de PC2.
+
+## 3.6 Adresses réseau des PC1, PC2 et PC5
+
+PC1 - Adresse IP : 10.10.4.1/16
+Adresse du réseau : **10.10.10.0.0/16
+Première adresse disponible:10.10.0.1
+Dernière adresse disponible :10.10.255.254
+Adresse de diffusion: **10.10.25510.10.255.255
+
+PC2 - Adresse IP : 10.11.80.2/16
+Adresse réseau : **10.11.10.11.0.0/16
+Première adresse disponible : **10.11.10.11.0.1
+Dernière adresse disponible:10.11.255.254
+Adresse de diffusion: *10.11.255.255
+
+PC5 - Adresse IP : 10.10.4.7/15
+Un masque /15 couvre deux sou/16, soit **10.10.0.010.10.0.0/16 et 10.11.0.0/16 .
+
+Adresse réseau : **10.10.0.0/10.10.0.0/15
+Première adresse disponible:10.10.0.1
+Dernière adresse disponible :10.11.255.254
+Adresse de diffusion : 10.11.255.255
+
+## 3.7 Quels ordinateurs peuvent communiquer entre eux ?
+PC1	IP 10.10.4	R 10.10.0.0/
+PC2	IP 10.11.80	R 10.11.
+PC3	IP 10.10.80	R 10.
+PC4	IP 10.	R 10.10.0.0/
+PC5 IP  10.10.4.7 R 10.
+
+## 3.8 Qui peut accéder au réseau 172.16.5.0/24 ?
+Tous les PC peuvent accéder à ce réseau SI un routage est configuré sur le routeur B et R2.
+Tous les PC (PC1, PC2, PC3, PC4 et PC5) peuvent atteindre 172.16.5.0/24 via le routage configuré 
+
+## 3.9 Impact si sur l'intervertit des ports de connexion de PC2 et PC3 sur le switch A ?
+PC2 est en 10.11.80.2/16 (R10.11.0.0/16 )
+PC3 est en 10.10.80.3/16(Concernant10.10.0.0/16 )
+
+## 3.10 Passage à une configuration IP dynamique (DHCP)
+Activer le service DHCP Server
+netsh interface ip set address "Ethernet" dhcp
+ip dhcp excluded-address 10.10.0.1 10.10.0.10  ! (Réserver des adresses pour les équipements fixes)
+ip dhcp pool VLAN10
+ network 10.10.0.0 255.255.0.0
+ default-router 10.10.255.254
+ dns-server 8.8.8.8
+
+
+
+
+
